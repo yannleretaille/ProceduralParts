@@ -1,5 +1,8 @@
 ============= Changelog for ProceduralParts  =========
 
+===  1.3.14  ===
+KSP 1.4.1 ready
+
 ===  1.2.14  ===
 Change the included assemblies during compilation to KSP 1.3.1
 
