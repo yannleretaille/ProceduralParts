@@ -1,5 +1,8 @@
 ============= Changelog for ProceduralParts  =========
 
+===  1.3.16.1  ===
+Tag as supporting KSP 1.5
+
 ===  1.3.16  ===
 Fix SRB nozzle colour.
 
