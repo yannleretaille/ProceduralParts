@@ -79,6 +79,7 @@
     <Compile Include="ProceduralHeatshield.cs" />
     <Compile Include="ProceduralShapeBezierCone.cs" />
     <Compile Include="ProceduralShapePill.cs" />
+    <Compile Include="ProceduralShapePolygon.cs" />
     <Compile Include="ProceduralSRB.cs" />
     <Compile Include="ProceduralShapeCone.cs" />
     <Compile Include="ProceduralShapeCylinder.cs" />
