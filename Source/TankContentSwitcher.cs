@@ -56,7 +56,7 @@ namespace ProceduralParts
         public override void OnAwake()
         {
             base.OnAwake();
-            this.window = part.FindActionWindow();
+            this.window = part.PartActionWindow;
             //PartMessageService.Register(this);
             //this.RegisterOnUpdateEditor(OnUpdateEditor);
         }

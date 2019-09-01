@@ -351,7 +351,8 @@ namespace ProceduralParts
 
             // This is easy, just get the UV and location correctly and force an update.
             // as the position might be after some rotation and translation, it might not be exactly +/- 0.5
-            if (Mathf.Abs(Mathf.Abs(position.y) - 0.5f) < 1e-5f)
+            //if (Mathf.Abs(Mathf.Abs(position.y) - 0.5f) < 1e-5f)
+            if(true)    // HACK JUST TO SEE WHAT HAPPENS
             {
                 if (position.y > 0)
                 {
@@ -494,36 +495,43 @@ namespace ProceduralParts
         public override TransformFollower RemoveAttachment(object data, bool normalize)
         {
             Attachment attach = (Attachment)data;
-            switch (attach.location)
+            // More HACKery??? Changing a cylinder to a cone causes this method to be called three times. First top, second bottom, third top. On the third call, the
+            // attach.Location == Location.Top but attach.node == null. There shouldn't be a second top node... so the hack is to make sure there is a node to work with
+            // but the underlying cause should be found - why a second attachment that has no node?
+            if(attach.node != null)
             {
-                case Location.Top:
-                    topAttachments.Remove(attach.node);
-                    if (normalize)
-                        attach.follower.transform.localPosition = new Vector3(attach.uv[0] - 0.5f, 0.5f, attach.uv[1] - 0.5f);
-                    break;
-                case Location.Bottom:
-                    bottomAttachments.Remove(attach.node);
-                    if (normalize)
-                        attach.follower.transform.localPosition = new Vector3(attach.uv[0] - 0.5f, -0.5f, attach.uv[1] - 0.5f);
-                    break;
-                case Location.Side:
-                    sideAttachments.Remove(attach.node);
+                switch(attach.location)
+                {
+                    case Location.Top:
+                        topAttachments.Remove(attach.node);
+                        if(normalize)
+                            attach.follower.transform.localPosition = new Vector3(attach.uv[0] - 0.5f, 0.5f, attach.uv[1] - 0.5f);
+                        break;
+                    case Location.Bottom:
+                        bottomAttachments.Remove(attach.node);
+                        if(normalize)
+                            attach.follower.transform.localPosition = new Vector3(attach.uv[0] - 0.5f, -0.5f, attach.uv[1] - 0.5f);
+                        break;
+                    case Location.Side:
+                        sideAttachments.Remove(attach.node);
 
-                    if (normalize)
-                    {
-                        float theta = Mathf.Lerp(0, Mathf.PI * 2f, attach.uv[0]);
-                        float x = Mathf.Cos(theta);
-                        float z = -Mathf.Sin(theta);
+                        if(normalize)
+                        {
+                            float theta = Mathf.Lerp(0, Mathf.PI * 2f, attach.uv[0]);
+                            float x = Mathf.Cos(theta);
+                            float z = -Mathf.Sin(theta);
 
-                        Vector3 normal = new Vector3(x, 0, z);
-                        attach.follower.transform.localPosition = new Vector3(normal.x * 0.5f, 0.5f - attach.uv[1], normal.z * 0.5f);
-                        attach.follower.transform.localRotation = Quaternion.FromToRotation(Vector3.up, normal);
-                    }
-                    break;
+                            Vector3 normal = new Vector3(x, 0, z);
+                            attach.follower.transform.localPosition = new Vector3(normal.x * 0.5f, 0.5f - attach.uv[1], normal.z * 0.5f);
+                            attach.follower.transform.localRotation = Quaternion.FromToRotation(Vector3.up, normal);
+                        }
+                        break;
+                }
+
+                if(normalize)
+                    attach.follower.ForceUpdate();
             }
 
-            if (normalize)
-                attach.follower.ForceUpdate();
             return attach.follower;
         }
 
