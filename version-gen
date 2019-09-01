@@ -20,23 +20,23 @@ my $ASSEMBLY_FILE     = "Source/Properties/AssemblyInfo.cs";
 # Here's our base metadata. We'll add VERSION info to this before outputting.
 my $metadata = {
     NAME => "Procedural Parts",
-    URL  => "https://raw.githubusercontent.com/Swamp-Ig/ProceduralParts/master/ProceduralParts.version",
-	DOWNLOAD => "https://github.com/Swamp-Ig/ProceduralParts/releases",
+    URL  => "https://raw.githubusercontent.com/Tidal-Stream/ProceduralParts/master/ProceduralParts.version",
+	DOWNLOAD => "https://github.com/Tidal-Stream/ProceduralParts/releases",
 	GITHUB =>
 	{
-		USERNAME => "Swamp-Ig",
+		USERNAME => "Tidal-Stream",
 		REPOSITORY => "ProceduralParts"
 
 	},
     KSP_VERSION_MIN => {
         MAJOR => 1,
-        MINOR => 3,
+        MINOR => 7,
         PATCH => 0
 	},
     KSP_VERSION_MAX => {
         MAJOR => 1,
-        MINOR => 3,
-        PATCH => 1
+        MINOR => 7,
+        PATCH => 99
     },
 };
 
@@ -50,9 +50,9 @@ if ($version !~ m{
     ^v
     (?<major>\d+)\.
     (?<minor>\d+)\.
-    (?<patch>\d+)
-	(-pre)?-
-    (?<build>\d+)
+    (?<patch>\w+)
+	(-pre|-0)?-
+    (?<build>\w+)
 }x) {
     die "Cannot parse $version as a version!";
 }
@@ -68,7 +68,7 @@ say "Writing metadata for version $assembly_version";
 $metadata->{VERSION} = {
     MAJOR => int $+{major},
     MINOR => int $+{minor},
-    PATCH => int $+{patch},
+    PATCH => $+{patch},
     BUILD => 0              # If used, AVC could try to get the user to
                             # install git builds, which we don't want.
 };
